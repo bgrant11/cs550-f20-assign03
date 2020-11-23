@@ -19,11 +19,11 @@ static unsigned long translate(unsigned long address){
 	struct pid *pid;
 	struct task_struct *pid_struct;
 	struct mm_struct *pid_mm_struct;
-	struct pgd_t *pgd;
-	struct p4d_t *p4d;
-	struct pud_t *pud;
-	struct pmd_t *pmd;
-	struct pte_t *pte;
+	pgd_t *pgd;
+	p4d_t *p4d;
+	pud_t *pud;
+	pmd_t *pmd;
+	pte_t *pte;
 	
 	pid = find_get_pid (process_ID);
 	pid_struct = pid_task(pid, PIDTYPE_PID);
