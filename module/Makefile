@@ -13,7 +13,7 @@ clean:
 	-rm *.o *.ko *.mod.{c,o} modules.order Module.symvers || true
 
 inm:
-	sudo insmod page_table.ko pid=1 
+	sudo insmod page_table.ko process_ID=1 
 
 outm:
 	sudo rmmod page_table

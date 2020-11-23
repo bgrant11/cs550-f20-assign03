@@ -6,13 +6,40 @@
 #include <linux/sched.h>
 #include <linux/sched/signal.h>
 #include <linux/slab.h>
+#include <linux/pgtable.h>
 
 static unsigned long total_pages = (1ULL<<45);
 
-static int pid = -1;
-module_param(pid, int, S_IRUGO);
+static int process_ID = -1;
+module_param(process_ID, int, S_IRUGO);
 
-
+static unsigned long translate(unsigned long address){
+	unsigned long phys_address;	
+	struct pid *pid;
+	struct task_struct *pid_struct;
+	struct mm_struct *pid_mm_struct;
+	struct pgd_t *pgd;
+	struct p4d_t *p4d;
+	struct pud_t *pud;
+	struct pmd_t *pmd;
+	struct pte_t *pte;
+	
+	pid = find_get_pid (process_ID);
+	pid_struct = pid_task(pid, PIDTYPE_PID);
+	pid_mm_struct = pid_struct->mm;
+	pgd = pgd_offset(pid_struct->mm, address);
+	p4d = p4d_offset(pgd, address);
+	pud = pud_offset(p4d, address);
+	pmd = pmd_offset(pud, address);
+	pte = pte_offset_map(pmd, address);
+	if(pte_present(pte)){
+		phys_address = pte_pfn(pte);
+	} else{
+		phys_address = -1;
+	}
+	return phys_address;
+	
+}
 
 static int page_open(struct inode *inode, struct file *file)
 {    
@@ -43,8 +70,8 @@ struct miscdevice page_device = {
 static int __init page_init(void)
 {
     int error;
-	if(pid == -1){
-		pr_err("must pass paramater as pid=<pid>");
+	if(process_ID == -1){
+		pr_err("must pass paramater as process_ID=<pid>");
 		return -1;
 	}
 	pr_info("total_pages: %lu\n", total_pages);
