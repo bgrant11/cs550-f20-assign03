@@ -6,7 +6,8 @@
 #include <linux/sched.h>
 #include <linux/sched/signal.h>
 #include <linux/slab.h>
-#include <linux/pgtable.h>
+#include <linux/mm_types.h>
+
 
 static unsigned long total_pages = (1ULL<<45);
 
