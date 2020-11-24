@@ -11,13 +11,12 @@
 
 
 
-static unsigned long total_pages = (1ULL<<45);
+//static unsigned long total_pages = (1ULL<<45);
 
 static int process_ID = -1;
 module_param(process_ID, int, S_IRUGO);
 
-static unsigned long translate(unsigned long address){
-	unsigned long phys_address;	
+static void translate(void){
 	struct pid *pid;
 	struct task_struct *pid_struct;
 	struct mm_struct *pid_mm_struct;
@@ -27,23 +26,32 @@ static unsigned long translate(unsigned long address){
 	pmd_t *pmd;
 	pte_t *pte;
 	
+	vm_area_struct vma;
+	unsigned long vaddr;
+	unsigned long phys_address;	
+	
 	pid = find_get_pid (process_ID);
 	pid_struct = pid_task(pid, PIDTYPE_PID);
 	pid_mm_struct = pid_struct->mm;
-	pgd = pgd_offset(pid_struct->mm, address);
-	p4d = p4d_offset(pgd, address);
-	pud = pud_offset(p4d, address);
-	pmd = pmd_offset(pud, address);
-	pte = pte_offset_map(pmd, address);
-	if(pte_present(*pte)){
-		phys_address = pte_pfn(*pte);
-	} else{
-		phys_address = -1;
-	}
-	return phys_address;
 	
+	for(vma = mm->mmap; vma; vma = vma->vm_next){
+		for(vaddr = vma->vm_start; vaddr < vma->vm_end; vaddr++){
+			pgd = pgd_offset(pid_struct->mm, vaddr);
+			p4d = p4d_offset(pgd, vaddr);
+			pud = pud_offset(p4d, vaddr);
+			pmd = pmd_offset(pud, vaddr);
+			pte = pte_offset_map(pmd, vaddr);
+			if(pte_present(*pte)){
+				phys_address = pte_pfn(*pte);
+				pr_info("%lu --> %lu\n", vaddr, phys_address);
+			} else{ // this is here for a potential debug
+				phys_address = -1;
+			}
+		}
+	}
 }
 
+// not needed for now
 static int page_open(struct inode *inode, struct file *file)
 {    
 	pr_info("Opening page table Device\n");
@@ -73,11 +81,13 @@ struct miscdevice page_device = {
 static int __init page_init(void)
 {
     int error;
+	pr_info("initializing page table module\n");	
 	if(process_ID == -1){
 		pr_err("must pass paramater as process_ID=<pid>");
 		return -1;
 	}
-	pr_info("total_pages: %lu\n", total_pages);
+	//pr_info("total_pages: %lu\n", total_pages);
+	translate();
 	
     error = misc_register(&page_device);
     if (error) {
@@ -85,7 +95,7 @@ static int __init page_init(void)
         return error;
     }
 
-    pr_info("page table Device registered\n");
+    pr_info("page table module initialized\n");
     return 0;
 }
 
