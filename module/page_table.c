@@ -36,7 +36,7 @@ static unsigned long translate(unsigned long address){
 	pmd = pmd_offset(pud, address);
 	pte = pte_offset_map(pmd, address);
 	if(pte_present(*pte)){
-		phys_address = pte_pfn(pte);
+		phys_address = pte_pfn(*pte);
 	} else{
 		phys_address = -1;
 	}
