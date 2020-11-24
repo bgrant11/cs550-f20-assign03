@@ -26,7 +26,7 @@ static void translate(void){
 	pmd_t *pmd;
 	pte_t *pte;
 	
-	struct vm_area_struct vma;
+	struct vm_area_struct *vma;
 	unsigned long vaddr;
 	unsigned long phys_address;	
 	
