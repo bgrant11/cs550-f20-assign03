@@ -26,7 +26,7 @@ static void translate(void){
 	pmd_t *pmd;
 	pte_t *pte;
 	
-	vm_area_struct vma;
+	struct vm_area_struct vma;
 	unsigned long vaddr;
 	unsigned long phys_address;	
 	
@@ -34,9 +34,9 @@ static void translate(void){
 	pid_struct = pid_task(pid, PIDTYPE_PID);
 	pid_mm_struct = pid_struct->mm;
 	
-	for(vma = mm->mmap; vma; vma = vma->vm_next){
+	for(vma = pid_mm_struct->mmap; vma; vma = vma->vm_next){
 		for(vaddr = vma->vm_start; vaddr < vma->vm_end; vaddr++){
-			pgd = pgd_offset(pid_struct->mm, vaddr);
+			pgd = pgd_offset(pid_struct->pid_mm_struct, vaddr);
 			p4d = p4d_offset(pgd, vaddr);
 			pud = pud_offset(p4d, vaddr);
 			pmd = pmd_offset(pud, vaddr);
