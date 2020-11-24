@@ -7,7 +7,7 @@
 #include <linux/sched/signal.h>
 #include <linux/slab.h>
 #include <linux/mm_types.h>
-#include <arch/x86/include/asm/pgtable.h>
+#include <linux/pgtable.h>
 
 
 
