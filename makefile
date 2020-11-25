@@ -14,7 +14,9 @@ cleanmod:
 #inmod:
 #	make -C $(MOD) inm
 
-#   sudo insmod page_table.ko process_ID= 
+#   sudo insmod module/page_table.ko process_ID= 
+
+# cat /proc/PID/smaps
 
 outmod:
 	make -C $(MOD) outm
