@@ -92,7 +92,10 @@ static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 	switch (cmd){
 		case IOCTL_GET_PFN:
 			paddr = ioctl_translate(arg);
-			err = copy_to_user(&paddr, arg, sizeof(unsigned long));
+			err = copy_to_user((unsigned long*) 
+								arg, 
+								&paddr, 
+								sizeof(unsigned long));
 			if(err != 0){
 				pr_info("Problem sending address to user, %d\n", err);
 				return -EACCES;
