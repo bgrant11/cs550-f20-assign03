@@ -58,7 +58,7 @@ static long ioctl_translate(long vaddr){
 	pmd_t *pmd;
 	pte_t *pte;
 	
-	unsigned long vaddr;
+	//unsigned long vaddr;
 	unsigned long phys_address;	
 
 	pgd = pgd_offset(pid_struct->mm, vaddr);
