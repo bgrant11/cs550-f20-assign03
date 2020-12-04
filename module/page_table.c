@@ -97,6 +97,7 @@ static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 				pr_info("Problem sending address to user, %d\n", err);
 				return -EACCES;
 			}
+			break;
 		default:
 			pr_info("Invalid command");			
 			return -EINVAL;
