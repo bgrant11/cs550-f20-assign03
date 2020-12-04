@@ -52,7 +52,7 @@ static void translate(void){
 	}
 }
 
-static long ioctl_translate(long vaddr){
+static long ioctl_translate(unsigned long vaddr){
 	//int err;	
 	pgd_t *pgd;
 	p4d_t *p4d;
