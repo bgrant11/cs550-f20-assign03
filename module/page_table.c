@@ -147,7 +147,7 @@ static int __init page_init(void)
 	}
 	//pr_info("total_pages: %lu\n", total_pages);
 	translate();
-	
+	get_pid_structs();
     error = misc_register(&page_device);
     if (error) {
         pr_err("can't misc_register :(\n");
