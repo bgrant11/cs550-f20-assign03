@@ -31,6 +31,9 @@ user_app: user_app.c
 usertest: user_app
 	sudo ./user_app
 
+cleanuser:
+	rm -f user_app
+
 buildtests:
 	make -C $(TST)
 
@@ -47,7 +50,7 @@ comptest:
 	tests/computation_intensive &
 
 
-bothtest: memtest comptest
+bothtest: memtest comptest cleanuser
 	#make -C $(TST) bothrun
 	ps
 
