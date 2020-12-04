@@ -37,6 +37,7 @@ int main(int argc, char *argv[]){
 	printf("Enter virtual address: ");
 	scanf("%lu", &in_addr);
 	getchar(); //why is this needed?
+	printf("in_addr: %lu\n", in_addr);
 	phys_addr = translate_va(fd, in_addr); 
 	print_translation(in_addr, phys_addr);
 

@@ -14,7 +14,7 @@ cleanmod:
 #inmod:
 #	make -C $(MOD) inm
 
-#   sudo insmod module/page_table.ko process_ID= 
+#   sudo insmod module/page_table.ko process_ID=
 
 # cat /proc/PID/smaps
 
@@ -54,4 +54,4 @@ bothtest: memtest comptest cleanuser
 	#make -C $(TST) bothrun
 	ps
 
-cleanall: cleanmod cleantests
+cleanall: cleanmod cleantests cleanuser

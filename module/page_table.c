@@ -95,7 +95,9 @@ static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 	}	
 	switch (cmd){
 		case IOCTL_GET_PFN:
+			pr_info("arg: %lu\n", arg);
 			paddr = ioctl_translate(arg);
+			pr_info("paddr: %lu\n", paddr);					
 			err = copy_to_user((unsigned long*) 
 								arg, 
 								&paddr, 
