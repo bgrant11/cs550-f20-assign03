@@ -33,6 +33,7 @@ static void translate(void){
 	unsigned long vaddr;
 	unsigned long phys_address;	
 	
+	pr_info("in translate\n");	
 	for(vma = pid_mm_struct->mmap; vma; vma = vma->vm_next){
 		for(vaddr = vma->vm_start; vaddr < vma->vm_end; vaddr++){
 			pgd = pgd_offset(pid_struct->mm, vaddr);
@@ -61,6 +62,7 @@ static long ioctl_translate(long vaddr){
 	//unsigned long vaddr;
 	unsigned long phys_address;	
 
+	pr_info("in ioctl_translate\n");	
 	pgd = pgd_offset(pid_struct->mm, vaddr);
 	p4d = p4d_offset(pgd, vaddr);
 	pud = pud_offset(p4d, vaddr);
@@ -77,6 +79,7 @@ static long ioctl_translate(long vaddr){
 }
 
 static void get_pid_structs(void){
+	pr_info("in get_pid_structs\n");	
 	pid = find_get_pid (process_ID);
 	pid_struct = pid_task(pid, PIDTYPE_PID);
 	pid_mm_struct = pid_struct->mm;
@@ -85,6 +88,7 @@ static void get_pid_structs(void){
 static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 	int err;
 	unsigned long paddr;
+	pr_info("in page_ioctl\n");	
 	if(arg > MAX_VA){
 		pr_info("Virtual address is out of range");		
 		return -EINVAL;
