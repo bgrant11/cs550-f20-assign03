@@ -44,6 +44,7 @@ static void translate(void){
 			if(pte_present(*pte)){
 				phys_address = pte_pfn(*pte);
 				pr_info("%lu --> %lu\n", vaddr, phys_address);
+				pr_info("%X --> %X\n", vaddr, phys_address);
 			} else{ // this is here for a potential debug
 				phys_address = NO_FRAME;
 			}
@@ -96,8 +97,10 @@ static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 	switch (cmd){
 		case IOCTL_GET_PFN:
 			pr_info("arg: %lu\n", arg);
+			pr_info("arg: %X\n", arg);
 			paddr = ioctl_translate(arg);
-			pr_info("paddr: %lu\n", paddr);					
+			pr_info("paddr: %lu\n", paddr);	
+			pr_info("paddr: %X\n", paddr);				
 			err = copy_to_user((unsigned long*) 
 								arg, 
 								&paddr, 

@@ -21,8 +21,10 @@ unsigned long translate_va(int fd, unsigned long va){
 void print_translation(unsigned long va, unsigned long pa){
 	if(pa == NO_FRAME){
 		printf("%lu ---> NO_FRAME\n", va);
+		printf("%X ---> NO_FRAME\n", va);
 	} else {
 		printf("%lu ---> %lu\n", va, pa);
+		printf("%X ---> %X\n", va, pa);
 	}
 }
 
@@ -35,9 +37,9 @@ int main(int argc, char *argv[]){
 		return -1;
 	}
 	printf("Enter virtual address: ");
-	scanf("%lu", &in_addr);
+	scanf("%X", &in_addr);
 	getchar(); //why is this needed?
-	printf("in_addr: %lu\n", in_addr);
+	printf("in_addr: %X\n", in_addr);
 	phys_addr = translate_va(fd, in_addr); 
 	print_translation(in_addr, phys_addr);
 
