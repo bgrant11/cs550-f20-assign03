@@ -51,7 +51,7 @@ static void translate(void){
 }
 
 static long ioctl_translate(long vaddr){
-	int err;	
+	//int err;	
 	pgd_t *pgd;
 	p4d_t *p4d;
 	pud_t *pud;
@@ -91,7 +91,7 @@ static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 	}	
 	switch (cmd){
 		case IOCTL_GET_PFN:
-			paddr = ioctl_translation(arg);
+			paddr = ioctl_translate(arg);
 			err = copy_to_user(&paddr, arg, sizeof(unsigned long));
 			if(err != 0){
 				pr_info("Problem sending address to user, %d\n", err);
