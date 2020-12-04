@@ -39,7 +39,7 @@ int main()
 	// Which loop performs better?
 	// What happens if the number of rows increase?
 	// What happens if the number of columns increase?
-	
+	printf("memory_intensive ready\n");
 	while(1);
 
 

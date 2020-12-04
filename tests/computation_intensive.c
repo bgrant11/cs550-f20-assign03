@@ -52,8 +52,8 @@ int main(){
  
 	end = time(NULL);
 
-	printf("Time taken to find prime numbers: %ld seconds\n", end - start);
-
+	//printf("Time taken to find prime numbers: %ld seconds\n", end - start);
+	printf("computation_intensive done\n");
 	while(1);
 
 	return 0;
