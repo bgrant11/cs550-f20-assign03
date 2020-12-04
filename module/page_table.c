@@ -150,8 +150,9 @@ static int __init page_init(void)
 		return -1;
 	}
 	//pr_info("total_pages: %lu\n", total_pages);
+	get_pid_structs();	
 	translate();
-	get_pid_structs();
+
     error = misc_register(&page_device);
     if (error) {
         pr_err("can't misc_register :(\n");
