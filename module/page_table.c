@@ -18,9 +18,9 @@
 static int process_ID = -1;
 module_param(process_ID, int, S_IRUGO);
 
-struct pid *pid;
-struct task_struct *pid_struct;
-struct mm_struct *pid_mm_struct;
+//struct pid *pid;
+//struct task_struct *pid_struct;
+//struct mm_struct *pid_mm_struct;
 
 static void translate(void){
 	pgd_t *pgd;
@@ -31,7 +31,14 @@ static void translate(void){
 	
 	struct vm_area_struct *vma;
 	unsigned long vaddr;
-	unsigned long phys_address;	
+	unsigned long phys_address;		
+
+	struct pid *pid;
+	struct task_struct *pid_struct;
+	struct mm_struct *pid_mm_struct;
+	pid = find_get_pid (process_ID);
+	pid_struct = pid_task(pid, PIDTYPE_PID);
+	pid_mm_struct = pid_struct->mm;
 	
 	pr_info("in translate\n");	
 	for(vma = pid_mm_struct->mmap; vma; vma = vma->vm_next){
@@ -63,6 +70,13 @@ static long ioctl_translate(unsigned long vaddr){
 	//unsigned long vaddr;
 	unsigned long phys_address;	
 
+	struct pid *pid;
+	struct task_struct *pid_struct;
+	struct mm_struct *pid_mm_struct;
+	pid = find_get_pid (process_ID);
+	pid_struct = pid_task(pid, PIDTYPE_PID);
+	pid_mm_struct = pid_struct->mm;
+
 	pr_info("in ioctl_translate\n");	
 	pgd = pgd_offset(pid_struct->mm, vaddr);
 	p4d = p4d_offset(pgd, vaddr);
@@ -79,12 +93,14 @@ static long ioctl_translate(unsigned long vaddr){
 	
 }
 
+/*
 static void get_pid_structs(void){
 	pr_info("in get_pid_structs\n");	
 	pid = find_get_pid (process_ID);
 	pid_struct = pid_task(pid, PIDTYPE_PID);
 	pid_mm_struct = pid_struct->mm;
 }
+*/
 
 static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 	int err;
@@ -155,7 +171,7 @@ static int __init page_init(void)
 		return -1;
 	}
 	//pr_info("total_pages: %lu\n", total_pages);
-	get_pid_structs();	
+	//get_pid_structs();	
 	translate();
 
     error = misc_register(&page_device);
