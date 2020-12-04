@@ -3,7 +3,7 @@ MOD := module
 TST := tests
 
 
-all: buildtests mod
+all: buildtests mod user_app
 
 mod:
 	make -C $(MOD) all
@@ -22,6 +22,14 @@ outmod:
 	make -C $(MOD) outm
 
 
+
+
+
+user_app: user_app.c
+	gcc -o user_app user_app.c
+
+usertest: user_app
+	sudo ./user_app
 
 buildtests:
 	make -C $(TST)

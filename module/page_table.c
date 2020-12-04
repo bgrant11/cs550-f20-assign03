@@ -9,6 +9,8 @@
 #include <linux/mm_types.h>
 #include <linux/pgtable.h>
 
+#include "page_table.h"
+
 
 
 //static unsigned long total_pages = (1ULL<<45);
