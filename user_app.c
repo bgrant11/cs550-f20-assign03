@@ -19,10 +19,10 @@ unsigned long translate_va(int fd, unsigned long va){
 }
 
 void print_translation(unsigned long va, unsigned long pa){
-	if(addr == NO_FRAME){
+	if(pa == NO_FRAME){
 		printf("%lu ---> NO_FRAME\n", va);
 	} else {
-		printf("%lu ---> %lu\n", va, addr);
+		printf("%lu ---> %lu\n", va, pa);
 	}
 }
 
