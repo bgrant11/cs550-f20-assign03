@@ -23,7 +23,7 @@ memdemo: all memtest
 
 compdemo: all comptest
 
-demo: dmesg usrtest
+demo: dmesg usertest
 
 dmesg:
 	sudo dmesg
