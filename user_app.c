@@ -39,7 +39,9 @@ void get_input(int fd){
 	printf("Enter virtual page number: ");
 	//scanf("%lX", &in_addr);
 	scanf("%s", input);
+	printf("input: %s\n", input);
 	getchar(); //why is this needed?
+	printf("input: %s\n", input);
 	while(!strcmp(input, "exit")){
 		//printf("in_addr: %lu\n", in_addr);	
 		in_addr = strtoul(input, &endpoint, 16);		
