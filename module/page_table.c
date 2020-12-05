@@ -57,7 +57,7 @@ static void translate(void){
 				//pr_info("%lu --> %lu\n", vaddr, phys_address);
 				pr_info("%lX ( %lX | %lX ) --> %lX\n", vaddr, 
 														vpage,
-														vofffest,
+														voffest,
 														phys_address);
 				
 			} else{ // this is here for a potential debug
