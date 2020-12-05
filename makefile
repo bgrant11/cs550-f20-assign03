@@ -54,3 +54,6 @@ bothtest: memtest comptest cleanuser
 	ps
 
 cleanall: cleanmod cleantests cleanuser
+
+endall: cleanall outmod
+	kill $(pid)

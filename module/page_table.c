@@ -11,10 +11,6 @@
 
 #include "page_table.h"
 
-
-
-//static unsigned long total_pages = (1ULL<<45);
-
 static int process_ID = -1;
 module_param(process_ID, int, S_IRUGO);
 
@@ -54,12 +50,10 @@ static void translate(void){
 				phys_address = pte_pfn(*pte);
 				vpage = vaddr >> NUM_OFFSET_BITS;
 				voffset = vaddr & OFFSET_MASK;
-				//pr_info("%lu --> %lu\n", vaddr, phys_address);
 				pr_info("%lX ( %lX | %lX ) --> %lX\n", vaddr, 
 														vpage,
 														voffset,
 														phys_address);
-				
 			} else{ // this is here for a potential debug
 				phys_address = NO_FRAME;
 			}
@@ -68,7 +62,6 @@ static void translate(void){
 }
 
 static long ioctl_translate(unsigned long vpage){
-	//int err;	
 	pgd_t *pgd;
 	p4d_t *p4d;
 	pud_t *pud;
@@ -135,12 +128,8 @@ static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 			if(err != 0){
 				pr_info("problem getting vaddress from user, %d\n", err);
 			}		
-			pr_info("arg: %lu\n", arg);
-			pr_info("arg: %lX\n", arg);
-			pr_info("vaddr: %lu\n", vaddr);
 			pr_info("vaddr: %lX\n", vaddr);
-			paddr = ioctl_translate(vaddr);
-			pr_info("paddr: %lu\n", paddr);	
+			paddr = ioctl_translate(vaddr);	
 			pr_info("paddr: %lX\n", paddr);				
 			err = copy_to_user((unsigned long*) 
 								arg, 
@@ -154,21 +143,16 @@ static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 		default:
 			pr_info("Invalid command");			
 			return -EINVAL;
-
 	}
 	return 0;
-
 }
 
-static int page_open(struct inode *inode, struct file *file)
-{    
+static int page_open(struct inode *inode, struct file *file){    
 	pr_info("Opening page table Device\n");
-	pr_info("Opening page table Device end\n");	
 	return 0;
 }
 
-static int page_close(struct inode *inodep, struct file *filp)
-{
+static int page_close(struct inode *inodep, struct file *filp){
     pr_info("Closing page table Device\n");
     return 0;
 }
@@ -187,15 +171,13 @@ struct miscdevice page_device = {
     .fops = &page_fops,
 };
 
-static int __init page_init(void)
-{
+static int __init page_init(void){
     int error;
 	pr_info("initializing page table module\n");	
 	if(process_ID == -1){
 		pr_err("must pass paramater as process_ID=<pid>");
 		return -1;
 	}
-	//pr_info("total_pages: %lu\n", total_pages);
 	//get_pid_structs();	
 	translate();
 
@@ -204,13 +186,11 @@ static int __init page_init(void)
         pr_err("can't misc_register :(\n");
         return error;
     }
-
-    pr_info("page table module initialized\n");
+	pr_info("page table module initialized\n");
     return 0;
 }
 
-static void __exit page_exit(void)
-{
+static void __exit page_exit(void){
     misc_deregister(&page_device);
     pr_info("page table Device deregistered\n");
 }
