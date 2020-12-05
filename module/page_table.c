@@ -104,6 +104,7 @@ static void get_pid_structs(void){
 
 static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 	int err;
+	unsigned long vaddr;	
 	unsigned long paddr;
 	pr_info("in page_ioctl\n");	
 	if(arg > MAX_VA){
@@ -112,9 +113,17 @@ static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 	}	
 	switch (cmd){
 		case IOCTL_GET_PFN:
+			err = copy_from_user(&vaddr, 
+								(unsigned long)arg, 
+								sizeof(unsigned long));	
+			if(err != 0){
+				pr_info("problem getting vaddress from user, %d\n", err);
+			}		
 			pr_info("arg: %lu\n", arg);
 			pr_info("arg: %lX\n", arg);
-			paddr = ioctl_translate(arg);
+			pr_info("vaddr: %lu\n", vaddr);
+			pr_info("vaddr: %lX\n", vaddr);
+			paddr = ioctl_translate(vaddr);
 			pr_info("paddr: %lu\n", paddr);	
 			pr_info("paddr: %lX\n", paddr);				
 			err = copy_to_user((unsigned long*) 
@@ -122,7 +131,7 @@ static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 								&paddr, 
 								sizeof(unsigned long));
 			if(err != 0){
-				pr_info("Problem sending address to user, %d\n", err);
+				pr_info("Problem sending paddress to user, %d\n", err);
 				return -EACCES;
 			}
 			break;
