@@ -20,10 +20,10 @@ unsigned long translate_va(int fd, unsigned long va){
 
 void print_translation(unsigned long va, unsigned long pa){
 	if(pa == NO_FRAME){
-		printf("%lu ---> NO_FRAME\n", va);
+		//printf("%lu ---> NO_FRAME\n", va);
 		printf("%lX ---> NO_FRAME\n", va);
 	} else {
-		printf("%lu ---> %lu\n", va, pa);
+		//printf("%lu ---> %lu\n", va, pa);
 		printf("%lX ---> %lX\n", va, pa);
 	}
 }
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]){
 		printf("Error opening /dev/process_list: %d\n", fd);
 		return -1;
 	}
-	printf("Enter virtual address: ");
+	printf("Enter virtual page number: ");
 	scanf("%lX", &in_addr);
 	getchar(); //why is this needed?
 	printf("in_addr: %lu\n", in_addr);	
