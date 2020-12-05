@@ -32,6 +32,8 @@ static void translate(void){
 	struct vm_area_struct *vma;
 	unsigned long vaddr;
 	unsigned long phys_address;		
+	unsigned long vpage;
+	unsigned long voffset;
 
 	struct pid *pid;
 	struct task_struct *pid_struct;
@@ -50,8 +52,14 @@ static void translate(void){
 			pte = pte_offset_map(pmd, vaddr);
 			if(pte_present(*pte)){
 				phys_address = pte_pfn(*pte);
-				pr_info("%lu --> %lu\n", vaddr, phys_address);
-				pr_info("%lX --> %lX\n", vaddr, phys_address);
+				vpage = vaddr >> NUM_OFFSET_BITS;
+				voffset = vaddr & OFFSET_MASK;
+				//pr_info("%lu --> %lu\n", vaddr, phys_address);
+				pr_info("%lX ( %lX | %lX ) --> %lX\n", vaddr, 
+														vpage,
+														vofffest,
+														phys_address);
+				
 			} else{ // this is here for a potential debug
 				phys_address = NO_FRAME;
 			}
@@ -59,7 +67,7 @@ static void translate(void){
 	}
 }
 
-static long ioctl_translate(unsigned long vaddr){
+static long ioctl_translate(unsigned long vpage){
 	//int err;	
 	pgd_t *pgd;
 	p4d_t *p4d;
@@ -67,8 +75,8 @@ static long ioctl_translate(unsigned long vaddr){
 	pmd_t *pmd;
 	pte_t *pte;
 	
-	//unsigned long vaddr;
 	unsigned long phys_address;	
+	unsigned long vpage_as_address;
 
 	struct pid *pid;
 	struct task_struct *pid_struct;
@@ -76,23 +84,28 @@ static long ioctl_translate(unsigned long vaddr){
 	pid = find_get_pid (process_ID);
 	pid_struct = pid_task(pid, PIDTYPE_PID);
 	pid_mm_struct = pid_struct->mm;
+	
+	vpage_as_address = vpage << NUM_OFFSET_BITS;
 
 	pr_info("in ioctl_translate\n");	
-	pgd = pgd_offset(pid_struct->mm, vaddr);
-	p4d = p4d_offset(pgd, vaddr);
-	pud = pud_offset(p4d, vaddr);
-	pmd = pmd_offset(pud, vaddr);
-	pte = pte_offset_map(pmd, vaddr);
+	pgd = pgd_offset(pid_struct->mm, vpage_as_address);
+	p4d = p4d_offset(pgd, vpage_as_address);
+	pud = pud_offset(p4d, vpage_as_address);
+	pmd = pmd_offset(pud, vpage_as_address);
+	pte = pte_offset_map(pmd, vpage_as_address);
 	if(pte_present(*pte)){
 		phys_address = pte_pfn(*pte);
-		//+pr_info("%lu --> %lu\n", vaddr, phys_address);
-	} else{ // this is here for a potential debug
+	} else{ 
 		phys_address = NO_FRAME;
 	}
 	return phys_address;
 	
 }
 
+// i wrote this to avoid duplicating code but I thought it was
+// causing problems perhaps because the page table can move around.
+// I now dont think this was a problem, but for the sake of time, I 
+// Am not reverting back to this better design choice
 /*
 static void get_pid_structs(void){
 	pr_info("in get_pid_structs\n");	
@@ -102,6 +115,9 @@ static void get_pid_structs(void){
 }
 */
 
+
+// the variables should be named vpage and ppage, but for the sake of time
+// it stays
 static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 	int err;
 	unsigned long vaddr;	
