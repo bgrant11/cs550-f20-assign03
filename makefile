@@ -11,10 +11,10 @@ mod:
 cleanmod:
 	make -C $(MOD) clean
 
-#inmod:
+inmod: module/page_table.ko
 #	make -C $(MOD) inm
 
-#   sudo insmod module/page_table.ko process_ID=
+   sudo insmod module/page_table.ko process_ID=$(PID)
 
 # cat /proc/PID/smaps
 
