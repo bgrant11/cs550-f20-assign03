@@ -19,11 +19,11 @@ inmod: module/page_table.ko
 outmod:
 	make -C $(MOD) outm
 
-memdemo1: all memtest
+memdemo: all memtest
 
-compdemo1: all comptest
+compdemo: all comptest
 
-demo2: dmesg usrtest
+demo: dmesg usrtest
 
 demsg:
 	sudo dmesg
