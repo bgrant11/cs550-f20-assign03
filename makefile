@@ -12,15 +12,12 @@ cleanmod:
 	make -C $(MOD) clean
 
 inmod: module/page_table.ko
-#	make -C $(MOD) inm
 	sudo insmod module/page_table.ko process_ID=$(pid)
 
 # cat /proc/PID/smaps
 
 outmod:
 	make -C $(MOD) outm
-
-
 
 
 
@@ -40,18 +37,16 @@ cleantests:
 	make -C $(TST) clean
 
 memtest:
-	#make -C $(TST) memrun
-	tests/memory_intensive &
+	$(TST)/memory_intensive &
+	ps
 
 
 comptest:
-	#make -C $(TST) comprun
-	tests/computation_intensive &
+	$(TST)/computation_intensive &
+	ps
 
 
 bothtest: memtest comptest cleanuser
-	#make -C $(TST) bothrun
-	ps
 
 cleanall: cleanmod cleantests cleanuser
 
