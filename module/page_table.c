@@ -114,7 +114,7 @@ static long page_ioctl(struct file *f, unsigned int cmd, unsigned long arg){
 	switch (cmd){
 		case IOCTL_GET_PFN:
 			err = copy_from_user(&vaddr, 
-								(unsigned long)arg, 
+								(unsigned long*)arg, 
 								sizeof(unsigned long));	
 			if(err != 0){
 				pr_info("problem getting vaddress from user, %d\n", err);
