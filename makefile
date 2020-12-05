@@ -13,8 +13,7 @@ cleanmod:
 
 inmod: module/page_table.ko
 #	make -C $(MOD) inm
-
-   sudo insmod module/page_table.ko process_ID=$(PID)
+	sudo insmod module/page_table.ko process_ID=$(PID)
 
 # cat /proc/PID/smaps
 
