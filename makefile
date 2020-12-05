@@ -25,7 +25,7 @@ compdemo: all comptest
 
 demo: dmesg usrtest
 
-demsg:
+dmesg:
 	sudo dmesg
 
 user_app: user_app.c
